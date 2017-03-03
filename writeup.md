@@ -1,3 +1,19 @@
+
+### Vehicle Detection Project
+
+The goals / steps of this project are the following:
+
+* Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images and train a classifier Linear SVM classifier. Apply a color transform and append binned color features, as well as histograms of color, to your HOG feature vector.
+* Note: normalize features and randomize a selection for training and testing.
+* Implement a sliding-window technique and use your trained classifier to search for vehicles in images.
+* Run your pipeline on a video stream (start with the test_video.mp4 and later implement on full project_video.mp4) and create a heat map of recurring detections frame by frame to reject outliers and follow detected vehicles.
+* Estimate a bounding box for vehicles detected.
+
+In **P5_vehicle_tracking_solution.ipynb** file, for the above steps, explanation on implementation is provided.
+
+
+## Rubric points
+
 ### Histogram of Oriented Gradients (HOG)
 
 
@@ -45,7 +61,7 @@ In **utils.py** line no.345, function **find_cars()** takes image as input on wh
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working. What did you do to optimize the performance of your classifier?
 
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result. Here are some example images:
+Ultimately I searched on three scales(1,1.5 and 2.0 as given as input to find_cars() function) using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which helped in classification of car and notcar almost precisely . Here are some example images:
 
 ![](./output_images/test_images_heatmap_labels.png)
 
