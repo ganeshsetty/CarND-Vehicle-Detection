@@ -100,6 +100,8 @@ I searched on three scales(1,1.5 and 2.0 as given as input to find_cars() functi
 
 Here's a link to my video result
 
+https://youtu.be/2fi5TwdafBs
+
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
 Refer process.py file
