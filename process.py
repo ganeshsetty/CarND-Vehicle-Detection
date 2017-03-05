@@ -7,7 +7,7 @@ Created on Wed Mar  1 19:42:32 2017
 import numpy as np
 import pickle
 from utils import *
-#from train import *
+
 def init_global():
     global count,first_frame
     count = 0
@@ -38,14 +38,21 @@ def process_detect(img):
     ystop = 420
        
     heatmap_sum = np.zeros_like(img[:,:,0]).astype(np.float)
+    windows_img = np.copy(img)
     for scale in (1.0,1.5,2.0):
+    
+        # The ROI in y direction is varied adaptively for each window size search,
+        # such that small window size search (farther cars) lie in top of ROI,gradually 
+        # ROI increases with window size to search nearer cars
         ystop = ystop + 75
         
-        out_img,heatmap = find_cars(img,xstart, xstop, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, 
+        out_img,heatmap,hotwindows_list = find_cars(img,xstart, xstop, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, 
                                     cell_per_block, spatial_size, hist_bins)
         
         heatmap_sum = np.add(heatmap_sum,heatmap)
-    
+        windows_img = draw_boxes(windows_img, hotwindows_list, color=(255, 0, 0), thick=6) 
+        
+        
     # Apply threshold to help remove false positives
     heatmap = apply_threshold(heatmap_sum,2)
             
@@ -56,8 +63,9 @@ def process_detect(img):
     labels = label(heatmap)
             
     draw_img,bbox_list = draw_labeled_bboxes(np.copy(img), labels)
-        
-    return draw_img,heatmap,labels
+          
+    return draw_img,heatmap,labels,windows_img
+    
     
 def process_track(img):
     
@@ -71,9 +79,9 @@ def process_track(img):
     if first_frame == 1:
         heatmap_sum = np.zeros_like(img[:,:,0]).astype(np.float)
         for scale in (1.0,1.5,2.0):
-            #xstart = xstart - 100
+            
             ystop = ystop+75
-            out_img,heatmap = find_cars(img,xstart, xstop, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, 
+            out_img,heatmap,hotwindows_list = find_cars(img,xstart, xstop, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, 
                                     cell_per_block, spatial_size, hist_bins)
         
             heatmap_sum = np.add(heatmap_sum,heatmap)
@@ -100,13 +108,13 @@ def process_track(img):
         return draw_img
      
     if count <= 3:
-        #xstart = 400
+        
         ystop = 400
         for scale in (1.0,1.5,2.0):
-            #xstart = xstart -100
+            
             ystop = ystop+100
             
-            out_img,heatmap = find_cars(img,xstart, xstop, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, 
+            out_img,heatmap,hotwindows_list = find_cars(img,xstart, xstop, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, 
                                     cell_per_block, spatial_size, hist_bins)
             heatmap_sum = np.add(heatmap_sum , heatmap)
             
