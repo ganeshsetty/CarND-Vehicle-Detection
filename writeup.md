@@ -89,7 +89,8 @@ The **draw_labeled_bboxes()** function takes labels image and put bounding boxes
 
 The previous image clearly shows pictorically, 
 
-i)The image under title '**hotwindows**' shows, the overlapping bounding boxes when searching using multi scale windows over the ROI
+i)The image under title '**hotwindows**' shows, the overlapping bounding boxes when searching using multi scale windows over the ROI.
+One can see lot of false positives.
 
 ii) The image under title '**heatmap thresholded**' shows, the less hotwindows are removed using threshold of 2 on the heatmap summed up of all hotwindows, i.e false positives are removed.
 
