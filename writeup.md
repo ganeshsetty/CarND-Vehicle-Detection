@@ -55,7 +55,7 @@ Choosen
 
 Orientations = 9, Pixel per cell = (8,8), cells per block = 2 as seen from above HOG images, features for above configuration are clearly visible compared with other configurations expecially pix per cell as (16,16)
 
-Also experimented with above configurations on classifier test accuracy of **98.75%** is highest obtained with Orientations = 9, Pixel per cell = (8,8), cells per block = 2, YCbCr,spatial bin =(32,32)
+Also experimented with above configurations on classifier test accuracy of **98.75%** is highest obtained with Orientations = 9, Pixel per cell = (8,8), cells per block = 2, YCbCr,spatial bin =(16,16), Refer ** train.py** file, line no.33 to 43 for complete configuration used for SVC.
 
 
 ### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
