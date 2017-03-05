@@ -137,4 +137,7 @@ Here I'll talk about the approach I took, what techniques I used, what worked an
 
 i) To get good testscore using SVM classifier, tuned for hog parameters,choosen color space YCrCb.Getting higher score of approx 99% was not an issue with the amount of trainining images, but using HOG+SVM resulted in number of false positives but with post processing using heatmap thresholding improved the accuracy in car detection in almost throughout the project_video.Very rarely observed window image of lane under shadow was shown as detected car.Also acheiving real time detection may need high end image processors like hardware coprocessors.
 
-ii) To have robust detection under varoius road light coditions, more training dataset will improve in classification. The use of DNN will improve robustness in detection. The hog subsampling technique helped in fast search but still needed improvement. The search can be improved further by adaptively limiting ROI by knowing the cars detected areas of previous frames.
+ii) To have robust detection under varoius road light coditions, more training dataset will improve in classification. The use of DNN will improve robustness in detection. The hog subsampling technique helped in fast search but still needed improvement. The search can be improved further by adaptively limiting ROI by knowing the cars detected areas of previous frames. Also the detection for challenge video of Advanced lane line project was tested for robustness and found that the vehicle next lane is huge and could hardly detected as car.Will be addressing such usecases in future as may need bigger window size search as part of multi scale windowing.The video link is below
+
+https://youtu.be/qQw4tm3Bn24
+
