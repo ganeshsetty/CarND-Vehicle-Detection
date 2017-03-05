@@ -59,9 +59,11 @@ In **train.py** line no.77, function train() takes feature vectors as input and 
 
 In **utils.py** line no.345, function **find_cars()** takes image as input on which vehicles are to be identified,extracts hog features for entire image at once and using hog sub-sampling to extract features for each window rather than computing hog features for each window which is time consuming. The scale factor taken as input is to alter the search window size. The higher the factor the image is reshaped down by that factor i.e indirectly increase search window size thereby number of windows search is reduced for ROI.To identify cars farther in the image, scale of 1 is used and for cars nearer, a higher scale factor of 1.5 or 2 is used. The subsampled hog features are normalized and used for prediction by classifier. If predicted 1 , the car is found in that window and drawn rectangle box and also the pixels inside the box are added with 1 creating heatmap.
 
+The overlapping of 0.75 with each other windows is used to improve classification
+
 #### 2. Show some examples of test images to demonstrate how your pipeline is working. What did you do to optimize the performance of your classifier?
 
-Ultimately I searched on three scales(1,1.5 and 2.0 as given as input to find_cars() function) using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which helped in classification of car and notcar almost precisely . Here are some example images:
+I searched on three scales(1,1.5 and 2.0 as given as input to find_cars() function equivalent of window size(64,64),(96,96) and (128,128) respectively) using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which helped in classification of car and notcar almost precisely . Here are test images on which my pipeline is applied:
 
 ![](./output_images/finalbbox.png)
 
@@ -78,13 +80,22 @@ Refer process.py file
 
 Two functions are defined. 
 
-The function **process_detect()** is for detecting vehicles in a single image and also to return heatmap and labels for plotting purpose. 
+The function **process_detect()** is for detecting vehicles in a single image and also to return hotwindows,heatmap,labels for plotting purpose. 
 
 The function **process_track()** is for detecting and tracking vehicles and drawing bounding boxes around vehicles for a video clip. For single image detection, process_track() functionality is same as process_detect(). This file has loading of svc model and parameters.The process_track() function takes video clip as input.It internally calls **find_cars()** function with multi-scale window sizes, detects windows where it predicts presence of car and for those windows the pixels are added heat by adding 1 to get heatmap.For all multi-scale window sizes the heatmap is calculated and summed up and saved as heatmap_sum. This summed up so that by applying threshold, the less predicted pixels (false positives) are removed given that prominent hot regions are retained.Then final boxes from heatmap is found using label() function which provides unique labels for each heatmap isolated regions as detected cars.The labeled image where pixels are set to 0 for background, 1 for car number 1, and 2 for car number 2.
 
 
 The **draw_labeled_bboxes()** function takes labels image and put bounding boxes around the labeled regions.This is done by identifying x,y positions of each car region, choosing minimum x,y of non-zero pixel positions and maximum of non-zero pixel positions as boundary for bounding boxes and drawn rectangle for each car region.For first frame, bounding boxes are drawn as explained above and for subsequent frames to make smooth boundary boxes drawing, for every 3(refered as count variable) frames new boundary box is drawn, by caching.
 
+The previous image clearly shows pictorically, 
+
+i)The image under title '**hotwindows**' shows, the overlapping bounding boxes when searching using multi scale windows over the ROI
+
+ii) The image under title '**heatmap thresholded**' shows, the less hotwindows are removed using threshold of 2 on the heatmap summed up of all hotwindows, i.e false positives are removed.
+
+iii) The image under title '**labels image**' shows label image by using scipy.ndimage.measurements.label() function. The overlapped hot windows above threshold are combined by label function resulting into the isolated car regions.
+
+iv) The image under title '**final bounding box image**' shows the clean rectangular box drawn by choosing minimum x,y of non-zero pixel positions and maximum (x,y) of non-zero pixel positions as boundary for bounding boxes and drawn rectangle for each car region.
 
 
 ### Discussion
