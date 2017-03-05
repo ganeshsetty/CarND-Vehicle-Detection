@@ -221,7 +221,6 @@ def single_img_features(image, cspace='RGB', spatial_size=(32, 32),
         img_features.append(spatial_features)
     if hist_feat == True:
         # Apply color_hist() also with a color space option now
-        print('hist_feat')
         hist_features = color_hist(feature_image, nbins=hist_bins)
         img_features.append(hist_features)
     if hog_feat  == True:
@@ -348,7 +347,10 @@ def find_cars(img, xstart, xstop,ystart, ystop, scale, svc, X_scaler, orient, pi
     draw_img = np.copy(img)
     heatmap = np.zeros_like(img[:,:,0]).astype(np.float)
     img = img.astype(np.float32)/255
+
+    hotwindows_list = []
    
+    # ROI where vehicles are searched for
     img_tosearch = img[ystart:ystop, xstart:xstop ,:]
     
     ctrans_tosearch = convert_color(img_tosearch, conv='RGB2YCrCb')
@@ -364,10 +366,11 @@ def find_cars(img, xstart, xstop,ystart, ystop, scale, svc, X_scaler, orient, pi
     nxblocks = (ch1.shape[1] // pix_per_cell)-1
     nyblocks = (ch1.shape[0] // pix_per_cell)-1 
     nfeat_per_block = orient*cell_per_block**2
-    # 64 was the orginal sampling rate, with 8 cells and 8 pix per cell
+    # 64 was the orginal sampling rate, with 8 cells and 8 pix per cell 
+    # i.e images size is (64,64) used for feature extraction for training classifier
     window = 64
     nblocks_per_window = (window // pix_per_cell)-1 
-    cells_per_step = 2  # Instead of overlap, define how many cells to step
+    cells_per_step = 2  # Instead of overlap, define how many cells to step (75% overlap)
     nxsteps = (nxblocks - nblocks_per_window) // cells_per_step
     nysteps = (nyblocks - nblocks_per_window) // cells_per_step
     
@@ -406,8 +409,11 @@ def find_cars(img, xstart, xstop,ystart, ystop, scale, svc, X_scaler, orient, pi
                 xbox_left = np.int(xleft*scale)
                 ytop_draw = np.int(ytop*scale)
                 win_draw = np.int(window*scale)
-                cv2.rectangle(draw_img,(xbox_left, ytop_draw+ystart),(xbox_left+win_draw,ytop_draw+win_draw+ystart),(0,0,255),6) 
+                cv2.rectangle(draw_img,(xbox_left, ytop_draw+ystart),(xbox_left+win_draw,ytop_draw+win_draw+ystart),(255,0,0),6) 
                 
                 heatmap[ytop_draw+ystart:ytop_draw+win_draw+ystart,xbox_left+xstart:xbox_left+xstart+win_draw]+=1
+                # Append window position to list
+                hotwindows_list.append(((xbox_left, ytop_draw+ystart), (xbox_left+win_draw, ytop_draw+win_draw+ystart)))
                 
-    return draw_img,heatmap
+                
+    return draw_img,heatmap,hotwindows_list
