@@ -26,6 +26,10 @@ In **P5_vehicle_tracking_solution.ipynb** file, for the above steps, explanation
 * Extract HOG features and visualized the HOG images
 ![](./output_images/hog_orient_car.png)
 
+In utils.py line no.18, function definition get_hog_features() obtains hog features.The hog image visualizations are obtained by configuring parameter vis as True while calling get_hog_features().
+
+In train.py line no.18 , function features_extract() extracts hog,bin spatial and color histogram features using function extract_features() at line no.57,65 and append all to get feature vector which is used for training SVM classifier. In utils.py line no.92,is defined for function extract_features()
+
 
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
@@ -47,10 +51,17 @@ Different orientations,pix per cell, cells per block parameters configuration fo
 
 ![](./output_images/hog_YCrCb_orient_cells_per_block.png)
 
+Choosen
+
+Orientations = 9, Pixel per cell = (8,8), cells per block = 2 as seen from above HOG images, features for above configuration are clearly visible compared with other configurations expecially pix per cell as (16,16)
+
+Also experimented with above configurations on classifier test accuracy of **98.75%** is highest obtained with Orientations = 9, Pixel per cell = (8,8), cells per block = 2, YCbCr,spatial bin =(32,32)
+
+
 ### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-I trained a linear SVM using...
-In **train.py** line no.77, function train() takes feature vectors as input and trains the classifier. The svc_modelfitting.ipynb, reads images(car and noncar) , calls features_extract() to get feature vectors for training the LinearSVC.Then calls train() function to model fit and model is saved as pickled file svc_pickle.p for easy access latter.
+I trained a linear SVM classifier with feature vectors comprising hog, color histograms and spatial bin of training images.
+In **train.py** line no.77, function train() takes feature vectors as input and trains the classifier. The svc_modelfitting.ipynb, reads images(car and noncar) , calls features_extract() to get feature vectors for training the LinearSVC.Then calls train() function to model fit and model is saved as pickled file **svc_pickle_allsamples.p** for easy access latter.
 
 
 ### Sliding Window Search
@@ -59,7 +70,7 @@ In **train.py** line no.77, function train() takes feature vectors as input and 
 
 In **utils.py** line no.345, function **find_cars()** takes image as input on which vehicles are to be identified,extracts hog features for entire image at once and using hog sub-sampling to extract features for each window rather than computing hog features for each window which is time consuming. The scale factor taken as input is to alter the search window size. The higher the factor the image is reshaped down by that factor i.e indirectly increase search window size thereby number of windows search is reduced for ROI.To identify cars farther in the image, scale of 1 is used and for cars nearer, a higher scale factor of 1.5 or 2 is used. The subsampled hog features are normalized and used for prediction by classifier. If predicted 1 , the car is found in that window and drawn rectangle box and also the pixels inside the box are added with 1 creating heatmap.
 
-The overlapping of 0.75 with each other windows is used to improve classification
+The overlapping of 0.75 with each other windows is used to improve classification(line no.373 of **utils.py** file)
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working. What did you do to optimize the performance of your classifier?
 
