@@ -1,3 +1,16 @@
+### Repository files
+
+**P5_vehicle_tracking_solution.ipynb:** This file has main function  calling process_track() to process video files for vehicle detection and tracking.
+
+**svc_modelfitting.ipynb:** This file is main module of training the SVC and save the model and configuration parameters as pickle file for easy access stored as **svc_pickle_allsamples.p**
+
+**process.py:** This python  file has process_detect() used for visuals for single image analysis and process_track() function having pipeline for vehicle detection and tracking.
+
+**train.py:** This file has training SVC functionality
+
+**utils.py:** This file has all helper functions for this project.
+
+**output_images folder:**  this folder has detection with final boundary box drawn for test images obtained by running the pipeline.Also few more .png files used for embedding visuals for this writeup.
 
 ### Vehicle Detection Project
 
