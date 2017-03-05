@@ -10,6 +10,7 @@ The goals / steps of this project are the following:
 * Estimate a bounding box for vehicles detected.
 
 In **P5_vehicle_tracking_solution.ipynb** file, for the above steps, explanation on implementation is provided.
+Code is adapted from classroom lessons and extended with new algorithms for removing false positives,smoothening of bounding boxes around vehicles over frames.
 
 
 ## Rubric points
@@ -26,7 +27,7 @@ In **P5_vehicle_tracking_solution.ipynb** file, for the above steps, explanation
 * Extract HOG features and visualized the HOG images
 ![](./output_images/hog_orient_car.png)
 
-In utils.py line no.18, function definition get_hog_features() obtains hog features.The hog image visualizations are obtained by configuring parameter vis as True while calling get_hog_features().
+In utils.py line no.18, function definition get_hog_features() obtains hog features which uses skimage.feature.hog(training_images,parameters).The hog image visualizations are obtained by configuring parameter vis as True while calling get_hog_features().
 
 In train.py line no.18 , function features_extract() extracts hog,bin spatial and color histogram features using function extract_features() at line no.57,65 and append all to get feature vector which is used for training SVM classifier. In utils.py line no.92,is defined for function extract_features()
 
@@ -34,11 +35,12 @@ In train.py line no.18 , function features_extract() extracts hog,bin spatial an
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
-* Color Histograms for RGB, YCrCb, HSV
 
 Different color spaces(YCrCb,HSV,RGB) configuration
 
 ![](./output_images/hog_colorspace_car.png)
+
+The hog_Y is with better hog feature image compared with hog_R but par with hog_V
 
 Different orientations,pix per cell, cells per block parameters configuration for YCrCb color space
 
@@ -55,7 +57,7 @@ Choosen
 
 Orientations = 9, Pixel per cell = (8,8), cells per block = 2 as seen from above HOG images, features for above configuration are clearly visible compared with other configurations expecially pix per cell as (16,16)
 
-Also experimented with above configurations on classifier test accuracy of **98.75%** is highest obtained with Orientations = 9, Pixel per cell = (8,8), cells per block = 2, YCbCr,spatial bin =(16,16), Refer **train.py** file, line no.33 to 43 for complete configuration used for SVC.
+Also experimented with above configurations on classifier test accuracy of **98.75%** is highest obtained with Orientations = 9, Pixel per cell = (8,8), cells per block = 2, YCbCr,spatial bin =(16,16), Refer **train.py** file, line no.33 to 43 for complete configuration used for SVC.But observed with better accuracy like 99.05 obtained with slight different configuration above doesn't guarantee on improvement of hot windows detection accuracy.Sticking to final choice with above configuration
 
 
 ### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
