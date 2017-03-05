@@ -63,7 +63,7 @@ In **utils.py** line no.345, function **find_cars()** takes image as input on wh
 
 Ultimately I searched on three scales(1,1.5 and 2.0 as given as input to find_cars() function) using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which helped in classification of car and notcar almost precisely . Here are some example images:
 
-![](./output_images/test_images_heatmap_labels.png)
+![](./output_images/finalbbox.png)
 
 
 ### Video Implementation
