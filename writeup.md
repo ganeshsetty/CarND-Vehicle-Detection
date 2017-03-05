@@ -102,6 +102,8 @@ Here's a link to my video result
 
 https://youtu.be/2fi5TwdafBs
 
+Observed couple of times false positives while processing this video and rest of video frames are detected and tracked smoothly.
+
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
 Refer process.py file
